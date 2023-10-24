@@ -20,6 +20,9 @@
     "mixstart/mixphp-framework": "1.1.1"
   },
   "autoload": {
+    "classmap": [
+      "vendor/"
+    ],
     "psr-4": {
       "apps\\": "apps/"
     }

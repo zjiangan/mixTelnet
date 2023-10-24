@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+
+// console入口文件
+
+require __DIR__ . '/../vendor/autoload.php';
+
+mix\base\Env::load(__DIR__ . '/../.env');
+
+$config   = require __DIR__ . '/../apps/console/config/main.php';
+$application = new telnet\TelnetApplication($config);
+// 创建一个telnet服务器
+$server = stream_socket_server('tcp://0.0.0.0:12345', $errno, $errstr);
+// 检查是否有错误
+if (!$server) {
+    die('无法创建telnet服务器: ' . $errstr);
+}
+// 处理telnet连接
+while (true) {
+    // 等待连接
+    $client = stream_socket_accept($server);
+
+    if ($client) {
+        // 创建一个新的线程来处理客户端连接
+        pcntl_fork();
+        while ($data = fread($client, 1024)) {
+            $data = trim($data, "\n\r");
+            if ($data == "") {
+                continue;
+            }
+            $avgs = explode(" ", $data);
+            $command = $avgs[0];
+            array_shift($avgs);
+            $result = $application->runAction($command, $avgs);
+            fwrite($client, $result . "\n");
+        }
+        fclose($client);
+    }
+
+}
+
+

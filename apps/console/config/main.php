@@ -16,6 +16,10 @@ return [
         'push exec'         => ['Push', 'Exec'],
         'clear exec'        => ['Clear', 'Exec'],
         'coroutine exec'    => ['Coroutine', 'Exec'],
+        'mul'               => ['Telnet','Mul'],
+        'incr'              => ['Telnet','Incr'],
+        'div'               => ['Telnet','Div'],
+        'conv_tree'         => ['Telnet','ConvTree'],
 
     ],
 
